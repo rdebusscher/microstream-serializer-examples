@@ -1,0 +1,79 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns="http://maven.apache.org/POM/4.0.0"
+         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+    <modelVersion>4.0.0</modelVersion>
+
+    <groupId>one.microstream.examples.rubus.serializer</groupId>
+    <artifactId>hello-world</artifactId>
+    <version>1.0-SNAPSHOT</version>
+
+    <properties>
+        <maven.compiler.source>11</maven.compiler.source>
+        <maven.compiler.target>11</maven.compiler.target>
+        <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+
+        <license.inceptionYear>2022</license.inceptionYear>
+        <license.licenseName>epl_v2</license.licenseName>
+        <license.licenceFile>${basedir}/LICENSE</license.licenceFile>
+
+        <microstream.version>07.00.00-MS-beta2</microstream.version>
+
+
+    </properties>
+
+    <organization>
+        <name>MicroStream Software</name>
+        <url>https://microstream.one</url>
+    </organization>
+
+    <licenses>
+        <license>
+            <name>Eclipse Public License - v 2.0</name>
+            <url>https://www.eclipse.org/legal/epl-2.0/</url>
+        </license>
+    </licenses>
+
+
+    <dependencies>
+        <dependency>
+            <groupId>one.microstream</groupId>
+            <artifactId>microstream-persistence-binary</artifactId>
+            <version>${microstream.version}</version>
+        </dependency>
+
+        <!-- for the logging -->
+        <dependency>
+            <groupId>org.slf4j</groupId>
+            <artifactId>slf4j-jdk14</artifactId>
+            <version>1.7.32</version>
+        </dependency>
+    </dependencies>
+
+    <build>
+        <plugins>
+            <plugin>
+                <groupId>org.codehaus.mojo</groupId>
+                <artifactId>license-maven-plugin</artifactId>
+                <version>2.0.0</version>
+                <configuration>
+                    <overrideFile>false</overrideFile>
+                    <includes>
+                        <include>**/*.java</include>
+                    </includes>
+                    <ignoreNoFileToScan>true</ignoreNoFileToScan>
+                </configuration>
+                <executions>
+                    <execution>
+                        <id>add-licence</id>
+                        <phase>process-sources</phase>
+                        <goals>
+                            <goal>update-file-header</goal>
+                            <goal>update-project-license</goal>
+                        </goals>
+                    </execution>
+                </executions>
+            </plugin>
+        </plugins>
+    </build>
+</project>
