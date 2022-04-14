@@ -57,7 +57,7 @@ public final class SerializerWithTypeInfo {
     public static <T> T deserialize(SerializedData data) throws Exception {
         SerializerFoundation<?> foundation = SerializerFoundation.New();
         PersistenceTypeRegistry typeRegistry = foundation.getTypeRegistry();
-        //data.getTypeInfo().forEach(typeRegistry::registerType);
+        data.getTypeInfo().forEach(typeRegistry::registerType);
         data.getTypeInfo().values().forEach(foundation::registerEntityType);
 
         try (Serializer<byte[]> serializer = Serializer.Bytes(foundation)) {

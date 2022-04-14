@@ -27,16 +27,20 @@ import one.microstream.persistence.binary.util.SerializerFoundation;
 public class TestCircular {
 
     public static void main(String[] args) {
+        Employee theBoss = createTheEmployeeHierarchy();  // Create an object with circular reference!
 
         SerializerFoundation<?> foundation = SerializerFoundation.New()
                 .registerEntityTypes(Employee.class);
-        Serializer<byte[]> serializer = Serializer.Bytes(foundation);
+        Employee reconstructed;
+        try (Serializer<byte[]> serializer = Serializer.Bytes(foundation)) {
 
-        Employee theBoss = createTheEmployeeHierarchy();  // Create an object with circular reference!
-        byte[] data = serializer.serialize(theBoss);
+            byte[] data = serializer.serialize(theBoss);
 
-        System.out.println("reconstructed");
-        Employee reconstructed = serializer.deserialize(data);
+            System.out.println("reconstructed");
+            reconstructed = serializer.deserialize(data);
+        } catch (Exception e) {
+            throw new RuntimeException(e);
+        }
         printHierarchy(reconstructed);
     }
 

@@ -27,22 +27,24 @@ import java.util.Date;
 
 public class HelloWorld {
 
-    public static void main(String[] args) throws InterruptedException {
+    public static void main(String[] args) {
         SerializerFoundation<?> foundation = SerializerFoundation.New()
                 .registerEntityTypes(Data.class);
-        Serializer<byte[]> serializer = Serializer.Bytes(foundation);
+        Data restored;
+        try (Serializer<byte[]> serializer = Serializer.Bytes(foundation)) {
+            // Try with resource to clean
+            Data instance = new Data("Hello MicroStream", new Date());
+            System.out.printf("Object created as : %s%n", instance);
 
-        Data instance = new Data("Hello MicroStream", new Date());
-        System.out.printf("Object created as : %s%n", instance);
+            byte[] data = serializer.serialize(instance);
+            System.out.printf("Serialized length : %s%n", data.length);
 
+            Thread.sleep(2000);  // So that it is clear that we deserialise 'old' data
 
-        byte[] data = serializer.serialize(instance);
-        System.out.printf("Serialized length : %s%n", data.length);
-
-        Thread.sleep(2000);  // So that it is clear that we deserialise 'old' data
-
-
-        Data restored = serializer.deserialize(data);
+            restored = serializer.deserialize(data);
+        } catch (Exception e) {
+            throw new RuntimeException(e);
+        }
         System.out.printf("Current timestamp : %s%n", new Date());
         System.out.printf("Instance restored : %s%n", restored);
     }

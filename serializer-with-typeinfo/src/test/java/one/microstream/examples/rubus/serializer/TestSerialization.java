@@ -70,6 +70,8 @@ public class TestSerialization {
         // To be on the safe side, test if it is John and Jane.
         Assertions.assertEquals("John Doe", reconstructed.get(0).getName());
         Assertions.assertEquals("Jane Doe", reconstructed.get(1).getName());
+
+        Assertions.assertEquals(2, serializedData.getTypeInfo().size());
     }
 
     @Test

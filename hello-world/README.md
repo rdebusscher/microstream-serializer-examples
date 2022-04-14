@@ -1,8 +1,8 @@
 # Hello World
 
-The most simple example with the MicroStream Serializer.
+The most simple example with the MicroStream `Serializer`.
 
-It shows you the basic usage of the Serializer. Important aspects of the code.
+It shows you the basic usage of the Serializer and important aspects of the code.
 
 * The Maven dependency
 

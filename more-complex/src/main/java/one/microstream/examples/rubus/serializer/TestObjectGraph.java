@@ -31,16 +31,20 @@ import java.util.List;
 public class TestObjectGraph {
 
     public static void main(String[] args) {
+        List<Person> people = newPersons();
 
         SerializerFoundation<?> foundation = SerializerFoundation.New()
                 .registerEntityTypes(Person.class, Address.class);
-        Serializer<byte[]> serializer = Serializer.Bytes(foundation);
+        List<Person> reconstructed;
+        try (Serializer<byte[]> serializer = Serializer.Bytes(foundation)) {
 
-        List<Person> people = newPersons();
-        byte[] data = serializer.serialize(people);
+            byte[] data = serializer.serialize(people);
 
-        System.out.println("Reconstructed");
-        List<Person> reconstructed = serializer.deserialize(data);
+            System.out.println("Reconstructed");
+            reconstructed = serializer.deserialize(data);
+        } catch (Exception e) {
+            throw new RuntimeException(e);
+        }
         System.out.println(reconstructed);
 
         Person john = reconstructed.stream().filter(p -> p.getId() == 11).findAny().orElseThrow();
@@ -48,7 +52,6 @@ public class TestObjectGraph {
 
         System.out.printf("Does Address instance is still shared : %s", john.getAddress() == jane.getAddress());
     }
-
 
     private static List<Person> newPersons() {
         List<Person> result = new ArrayList<>();

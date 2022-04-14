@@ -31,16 +31,17 @@ import java.util.List;
 public class TestWrongRegistration {
 
     public static void main(String[] args) throws Exception {
+        List<Person> people = newPersons();
 
         SerializerFoundation<?> foundation = SerializerFoundation.New()
                 .registerEntityTypes(Person.class, Address.class);
-        Serializer<byte[]> serializer = Serializer.Bytes(foundation);
+        byte[] data;
+        try (Serializer<byte[]> serializer = Serializer.Bytes(foundation)) {
 
-        List<Person> people = newPersons();
-        byte[] data = serializer.serialize(people);
-        serializer.close();
+            data = serializer.serialize(people);
+        }
 
-        System.out.println("Testing deserializer with same registered entity in the same order");
+        System.out.println("Testing deserializer with same registered entities in the same order");
         Serializer<byte[]> serializer2 = null;
         try {
             SerializerFoundation<?> foundation2 = SerializerFoundation.New()
@@ -48,15 +49,15 @@ public class TestWrongRegistration {
             serializer2 = Serializer.Bytes(foundation2);
 
             serializer2.deserialize(data);
-            System.out.println("Success");
+            System.out.printf("Success%n%n%n");
         } catch (Exception e) {
-            System.out.printf("Failed with %s%n", getExceptionMessage(e));
+            System.out.printf("Failed with %s%n%n%n", getExceptionMessage(e));
         } finally {
             serializer2.close();
 
         }
 
-        System.out.println("Testing deserializer with same registered entity in the different order");
+        System.out.println("Testing deserializer with same registered entities in the different order");
         Serializer<byte[]> serializer3 = null;
         try {
 
@@ -66,8 +67,9 @@ public class TestWrongRegistration {
             serializer3 = Serializer.Bytes(foundation3);
 
             serializer3.deserialize(data);
+            System.out.printf("Success%n%n%n");
         } catch (Exception e) {
-            System.out.printf("Failed with %s%n", getExceptionMessage(e));
+            System.out.printf("Failed with %s%n%n%n", getExceptionMessage(e));
         } finally {
             serializer3.close();
 
